@@ -99,9 +99,56 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
         }
     }
 
+    else if (messageText.EndsWith(" INR"))
+    {
+        // Handle INR to USD conversion if the message ends with " INR"
+        // Extract the amount and convert it
+        var amountText = messageText.Replace(" INR", "");
+        if (decimal.TryParse(amountText, out decimal amountToConvert))
+        {
+            decimal exchangeRate = 0.012m; // 1 INR = 0.012 USD
+            decimal convertedAmount = amountToConvert * exchangeRate;
+
+            var exchangeMessage = $"Currency exchange result:\n{amountToConvert} INR = {convertedAmount} USD";
+            await botClient.SendTextMessageAsync(message.Chat.Id, exchangeMessage, cancellationToken: cancellationToken);
+
+
+            // Display a console message with user ID, and timestamp
+            Console.WriteLine($"User ID: {message.Chat.Id}, Username: @{message.Chat.Username}, requested currency conversion: {amountToConvert} INR to USD at {DateTime.Now}");
+        }
+        else
+        {
+            var conversionErrorMessage = "Invalid amount format. Please provide a valid amount for conversion.";
+            await botClient.SendTextMessageAsync(message.Chat.Id, conversionErrorMessage, cancellationToken: cancellationToken);
+        }
+    }
+
+    else if (messageText.EndsWith(" USD"))
+    {
+        // Handle USD to INR conversion if the message ends with " USD"
+        // Extract the amount and convert it
+        var amountText = messageText.Replace(" USD", "");
+        if (decimal.TryParse(amountText, out decimal amountToConvert))
+        {
+            decimal exchangeRate = 83.27m; // 1 USD = 83.13 INR
+            decimal convertedAmount = amountToConvert * exchangeRate;
+
+            var exchangeMessage = $"Currency exchange result:\n{amountToConvert} USD = {convertedAmount} INR";
+            await botClient.SendTextMessageAsync(message.Chat.Id, exchangeMessage, cancellationToken: cancellationToken);
+
+
+            // Display a console message with user ID, and timestamp
+            Console.WriteLine($"User ID: {message.Chat.Id}, Username: @{message.Chat.Username}, requested currency conversion: {amountToConvert} USD to INR at {DateTime.Now}");
+        }
+
+    }
+    else
+    {
+        var conversionErrorMessage = "Invalid amount format. Please provide a valid amount for conversion.";
+        await botClient.SendTextMessageAsync(message.Chat.Id, conversionErrorMessage, cancellationToken: cancellationToken);
+    }
+
 }
-
-
 
 
 
