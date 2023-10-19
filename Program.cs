@@ -5,7 +5,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
 
-var botClient = new TelegramBotClient("6664951833:AAHZtXA-4FR03Ta6sOedUax9WNNV7XyyO-o");
+var botClient = new TelegramBotClient("BOT_TOKEN");
 
 
 using CancellationTokenSource cts = new();
@@ -49,15 +49,15 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
     long chatId = update.Message.Chat.Id; // Get the chat ID from the incoming message (dynamic chatId)
 
 
-    //Display user entered command details in console
+    //Display entered command details in console
     if (messageText.StartsWith("/"))
     {
         // Get the current date and time (to show in console)
         DateTime currentTime = DateTime.Now;
 
         // Display the user's chat ID, date, and time in console
-        Console.WriteLine(
-            $"User with Chat ID {message.Chat.Id} sent the command '{messageText}' at {currentTime.ToLocalTime()}.");
+        Console.WriteLine($"User with Chat ID {message.Chat.Id}, Username: @{message.Chat.Username ?? "N/A"}, sent the command '{messageText}' at {currentTime.ToLocalTime()}.");
+
     }
 
 
@@ -75,6 +75,21 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
                 await botClient.SendTextMessageAsync(message.Chat.Id, startMessage, cancellationToken: cancellationToken);
                 break;
 
+            case "/help":
+                var helpMessage = "To check the currency price, use this format:\n" +
+                                 "<amount> <source_currency>\n" +
+                                 "Example: 100 INR\n\n" +
+                                 "Currently supported currencies: INR and USD";
+                await botClient.SendTextMessageAsync(message.Chat.Id, helpMessage, cancellationToken: cancellationToken);
+                break;
+
+            case "/about":
+                var aboutMessage = "Currency Exchange Bot\n\n" +
+                                  "This bot allows you to check currency exchange rates and perform currency conversions. It currently supports both INR to USD and USD to INR conversion. To get the latest exchange rate, simply enter the amount and the target currency (e.g., 100 INR or 10 USD).\n\n" +
+                                  "Developed using C# and the Telegram Bot API in .NET. For more information, visit my repo : https://github.com/ideepakpg/currency-exchange-bot\n\n" +
+                                  "For help, use /help.";
+                await botClient.SendTextMessageAsync(message.Chat.Id, aboutMessage, cancellationToken: cancellationToken);
+                break;
 
             default:
                 // Handle unknown commands
@@ -84,8 +99,8 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
         }
     }
 
-
 }
+
 
 
 
