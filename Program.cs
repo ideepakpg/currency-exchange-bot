@@ -120,6 +120,9 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
         {
             var conversionErrorMessage = "Invalid amount format. Please provide a valid amount for conversion.";
             await botClient.SendTextMessageAsync(message.Chat.Id, conversionErrorMessage, cancellationToken: cancellationToken);
+
+            // Display a console message with user ID and timestamp for the error
+            Console.WriteLine($"User ID: {message.Chat.Id}, Username: @{message.Chat.Username}, sent message: \"{message.Text}\", Error: {conversionErrorMessage} at {DateTime.Now}");
         }
     }
 
@@ -146,6 +149,9 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
     {
         var conversionErrorMessage = "Invalid amount format. Please provide a valid amount for conversion.";
         await botClient.SendTextMessageAsync(message.Chat.Id, conversionErrorMessage, cancellationToken: cancellationToken);
+
+        // Display a console message with user ID and timestamp for the error
+        Console.WriteLine($"User ID: {message.Chat.Id}, Username: @{message.Chat.Username}, sent message: \"{message.Text}\", Error: {conversionErrorMessage} at {DateTime.Now}");
     }
 
 }
